@@ -1,9 +1,11 @@
 #![ allow(non_snake_case)]
 
 mod resolvers;
+mod db;
 
-use actix_web::{get, web, App, HttpServer, HttpResponse, Responder};
+use actix_web::{get, web, App, HttpServer};
 use resolvers::{ sendString };
+use db::{ initMongoConnection };
 
 
 #[get("/graphql")]
@@ -16,6 +18,7 @@ async fn greet() -> web::Json<String>
 #[actix_web::main]
 async fn main() -> std::io::Result<()>
 {
+    initMongoConnection();
     HttpServer::new(|| {
         App::new()
             .route("/hello", web::get().to(|| async { "Hello World!" }))

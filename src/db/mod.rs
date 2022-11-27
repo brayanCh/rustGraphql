@@ -1,12 +1,20 @@
+use mongodb::{bson::doc, options::ClientOptions, Client};
+mod env;
+use tokio;
+use env::{returnMongoKey};
+
 
 #[tokio::main]
-async fn initMongoConnection() -> mongodb::error::Result<()> {
+pub async fn initMongoConnection() -> mongodb::error::Result<()>
+{
     // Parse your connection string into an options struct
     let mut client_options =
-        ClientOptions::parse("mongodb+srv://<username>:<password>@<cluster-url>/test?w=majority")
+        ClientOptions::parse(&returnMongoKey())
             .await?;
     // Manually set an option
     client_options.app_name = Some("Rust Demo".to_string());
+
+    let client = Client::with_options(client_options)?;
 
     // Ping the server to see if you can connect to the cluster
     client
