@@ -1,12 +1,12 @@
 use mongodb::{bson::doc, options::ClientOptions, Client};
 mod env;
-use tokio;
 use env::{returnMongoKey};
 
 
 #[tokio::main]
 pub async fn initMongoConnection() -> mongodb::error::Result<()>
 {
+    println!("initMongoStarted");
     // Parse your connection string into an options struct
     let mut client_options =
         ClientOptions::parse(&returnMongoKey())
