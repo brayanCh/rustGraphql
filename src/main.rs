@@ -34,9 +34,6 @@ async fn main() -> std::io::Result<()>
 
 fn main()
 {
-    println!("This language is really good and I want to live");
-    let connection = initMongoConnection();
-
     match initMongoConnection()
     {
         Ok(()) => {
@@ -46,8 +43,4 @@ fn main()
             println!("{}", err);
         }
     }
-
-
-
-    //println!("End the program with code: {}", resCode);
 }
