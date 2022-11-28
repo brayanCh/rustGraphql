@@ -3,7 +3,7 @@ mod env;
 use env::{returnMongoKey};
 
 
-#[tokio::main]
+//#[tokio::main]
 pub async fn initMongoConnection() -> mongodb::error::Result<()>
 {
     println!("initMongoStarted");

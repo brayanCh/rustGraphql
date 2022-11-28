@@ -7,6 +7,6 @@ edition = "2021"
 
 [dependencies]
 
-warp = "0.3.3"
+actix-web = "4"
 mongodb = "2.3.1"
 tokio = "1.22.0"
