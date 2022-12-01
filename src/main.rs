@@ -6,13 +6,45 @@ mod db;
 use actix_web::{get, web, App, HttpServer, HttpResponse, Responder};
 use resolvers::{ sendString };
 use db::{ initMongoConnection };
+use serde::Serialize;
+
+#[derive(Serialize)]
+struct User {
+    ID: String,
+    name: String,
+    email : String,
+    cellnumber : String,
+    profilePicUrl : String,
+    planType : String,
+    registerDay: i32,
+    lastPaymentDay: i32,
+    hasCancelledTheService: bool
+}
+
+
+
 
 #[get("/graphql")]
-async fn greet() -> web::Json<String>
-{ 
-    print!("{}", sendString());
-    return web::Json(sendString());
+async fn greet() -> web::Json<Vec<User>>
+{
+    let mut returnedJSON :Vec<User>  = Vec::new(); 
+
+    returnedJSON.push(User{
+        ID: "215414asfdasdfg2354".to_string(),
+        name: "John Smith".to_string(),
+        email: "JohnSmith@gmail.com".to_string(),
+        cellnumber: "+233201244474".to_string(),
+        profilePicUrl: "dfadgfag3qwtqsgfda313".to_string(),
+        planType: "Standard".to_string(),
+        registerDay: 1234146i32,
+        lastPaymentDay: 1234146i32,
+        hasCancelledTheService: false
+    });
+
+    return web::Json(returnedJSON);
 }
+ 
+ 
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()>
