@@ -2,26 +2,12 @@
 
 mod resolvers;
 mod db;
+mod schemas;
 
 use actix_web::{get, web, App, HttpServer, HttpResponse, Responder};
 use resolvers::{ sendString };
 use db::{ initMongoConnection };
-use serde::Serialize;
-
-#[derive(Serialize)]
-struct User {
-    ID: String,
-    name: String,
-    email : String,
-    cellnumber : String,
-    profilePicUrl : String,
-    planType : String,
-    registerDay: i32,
-    lastPaymentDay: i32,
-    hasCancelledTheService: bool
-}
-
-
+use schemas::user::{ User };
 
 
 #[get("/graphql")]
@@ -58,7 +44,6 @@ async fn main() -> std::io::Result<()>
             println!("{}", err);
         }
     }
-
     HttpServer::new(|| {
         App::new()
             .route("/hello", web::get().to(|| async { "Hello World!" }))
