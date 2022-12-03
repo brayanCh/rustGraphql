@@ -6,15 +6,16 @@ mod schemas;
 
 use actix_web::{post, web, App, HttpServer };
 use db::{ initMongoConnection };
-use schemas::user::{ User };
+use schemas::user::{ UserSchema };
+//use mongodb::{ Database };
 
 
 #[post("/graphql")]
-async fn greet() -> web::Json<Vec<User>>
+async fn greet() -> web::Json<Vec<UserSchema>>
 {
-    let mut returnedJSON :Vec<User>  = Vec::new(); 
+    let mut returnedJSON :Vec<UserSchema>  = Vec::new(); 
 
-    returnedJSON.push(User{
+    returnedJSON.push(UserSchema{
         ID: "215414asfdasdfg2354".to_string(),
         name: "John Smith".to_string(),
         email: "JohnSmith@gmail.com".to_string(),
@@ -36,7 +37,12 @@ async fn main() -> std::io::Result<()>
 {
     let a = initMongoConnection();
     match a.await {
-        Ok(()) => {
+        Ok(db) => {
+            let listCollections = db.list_collection_names(None).await.expect("ddd");
+            for i in listCollections
+            {
+                println!("{}", i);
+            }
             println!("It worked");
         },
         Err(err) => {

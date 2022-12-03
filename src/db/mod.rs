@@ -1,10 +1,16 @@
-use mongodb::{bson::doc, options::ClientOptions, Client};
 mod env;
+
+use mongodb::{bson::doc, options::ClientOptions, Client};
+use mongodb::{ Database };
 use env::{returnMongoKey};
 
 
+fn print_type_of<T>(_: &T) {
+    println!("{}", std::any::type_name::<T>())
+}
+
 //#[tokio::main]
-pub async fn initMongoConnection() -> mongodb::error::Result<()>
+pub async fn initMongoConnection() -> mongodb::error::Result<Database>
 {
     println!("initMongoStarted");
     // Parse your connection string into an options struct
@@ -23,10 +29,9 @@ pub async fn initMongoConnection() -> mongodb::error::Result<()>
         .await?;
     println!("Connected successfully.");
 
-    let db = client.database("test");
+    let db : Database = client.database("test");
+    print_type_of(&db);
     // List the names of the databases in that cluster
-    for collection_name in db.list_collection_names(None).await? {
-        println!("{}", collection_name);
-    }
-    Ok(())
+    Ok(db)
 }
+
