@@ -11,3 +11,4 @@ actix-web = "4"
 mongodb = "2.3.1"
 tokio = "1.22.0"
 serde = { version = "1.0.126", features = ["derive"] }
+juniper = "0.15.10"

@@ -4,13 +4,12 @@ mod resolvers;
 mod db;
 mod schemas;
 
-use actix_web::{get, web, App, HttpServer, HttpResponse, Responder};
-use resolvers::{ sendString };
+use actix_web::{post, web, App, HttpServer };
 use db::{ initMongoConnection };
 use schemas::user::{ User };
 
 
-#[get("/graphql")]
+#[post("/graphql")]
 async fn greet() -> web::Json<Vec<User>>
 {
     let mut returnedJSON :Vec<User>  = Vec::new(); 
@@ -46,7 +45,7 @@ async fn main() -> std::io::Result<()>
     }
     HttpServer::new(|| {
         App::new()
-            .route("/hello", web::get().to(|| async { "Hello World!" }))
+            .route("/hello", web::post().to(|| async { "Hello World!" }))
             .service(greet)
     })
     .bind(("127.0.0.1", 8080))?

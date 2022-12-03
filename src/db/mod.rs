@@ -22,9 +22,11 @@ pub async fn initMongoConnection() -> mongodb::error::Result<()>
         .run_command(doc! {"ping": 1}, None)
         .await?;
     println!("Connected successfully.");
+
+    let db = client.database("test");
     // List the names of the databases in that cluster
-    for db_name in client.list_database_names(None, None).await? {
-        println!("{}", db_name);
+    for collection_name in db.list_collection_names(None).await? {
+        println!("{}", collection_name);
     }
     Ok(())
 }
