@@ -1,5 +1,4 @@
 use serde::Serialize;
-use mongodb::bson::{doc, Document };
 use mongodb::{ Database, Collection };
 
 //let db = client.database("mydb")

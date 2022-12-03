@@ -4,7 +4,8 @@ mod resolvers;
 mod db;
 mod schemas;
 
-use actix_web::{post, web, App, HttpServer };
+use actix_web::{post, web, App, get, HttpServer, HttpResponse };
+use juniper::http::{ graphiql::graphiql_source };
 use db::{ initMongoConnection };
 use schemas::user::{ UserSchema };
 //use mongodb::{ Database };
@@ -30,6 +31,16 @@ async fn greet() -> web::Json<Vec<UserSchema>>
     return web::Json(returnedJSON);
 }
  
+#[get("/graphiql")]
+async fn graphQlInterface() -> HttpResponse
+{
+
+    let html = graphiql_source(&"/graphql", Some("ws://localhost:8080"));
+
+    return HttpResponse::Ok()
+        .content_type("text/html; charset=utf-8")
+        .body(html);
+}
  
 
 #[actix_web::main]
@@ -53,6 +64,7 @@ async fn main() -> std::io::Result<()>
         App::new()
             .route("/hello", web::post().to(|| async { "Hello World!" }))
             .service(greet)
+            .service(graphQlInterface)
     })
     .bind(("127.0.0.1", 8080))?
     .run()

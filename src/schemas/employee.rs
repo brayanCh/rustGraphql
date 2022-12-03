@@ -1,4 +1,5 @@
 use serde::Serialize;
+use mongodb::{ Database, Collection };
 
 #[derive(Serialize)]
 pub struct EmployeeSchema {

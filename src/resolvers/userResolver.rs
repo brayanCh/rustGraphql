@@ -1,25 +1,9 @@
-
-pub fn getAllUsers ()
-{
+use mongodb::{ Database, Collection };
 
 
-}
+pub struct Query {}
 
-pub fn getUserById ()
-{
+impl Query {
 
-
-}
-
-pub fn createUser ()
-{
-
-
-}
-
-pub fn updateUser ()
-{
-
-
-}
-
+    pub async getAllUsers() 
+};
