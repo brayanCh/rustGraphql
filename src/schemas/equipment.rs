@@ -2,7 +2,7 @@ use serde::Serialize;
 
 
 #[derive(Serialize)]
-pub struct User {
+pub struct EquipmentSchema {
     pub ID: String,
     pub name: String,
     pub price : i16,
@@ -10,4 +10,10 @@ pub struct User {
     pub expectedMaintenanceDate: i32,
     pub hasBeenThrowAway: bool,
     pub isInMaintenance: bool
+}
+
+
+pub fn equipmentCollection (db : &Database ) -> Collection<EquipmentSchema>
+{
+    return db.collection::<EquipmentSchema>("equipment");
 }

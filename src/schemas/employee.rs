@@ -1,7 +1,7 @@
 use serde::Serialize;
 
 #[derive(Serialize)]
-pub struct Employee {
+pub struct EmployeeSchema {
     pub ID: String,
     pub name: String,
     pub email : String,
@@ -16,3 +16,10 @@ pub struct Employee {
     pub isInVacation: bool,
     pub isAdmin: bool
 }
+
+
+pub fn employeeCollection (db : &Database ) -> Collection<EmployeeSchema>
+{
+    return db.collection::<EmployeeSchema>("employee");
+}
+

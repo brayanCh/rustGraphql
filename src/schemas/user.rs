@@ -19,5 +19,5 @@ pub struct UserSchema {
 
 pub fn userCollection (db : &Database ) -> Collection<UserSchema>
 {
-    return db.collection::<UserSchema>("user")
+    return db.collection::<UserSchema>("user");
 }
