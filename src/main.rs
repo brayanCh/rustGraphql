@@ -3,33 +3,16 @@
 mod resolvers;
 mod db;
 mod schemas;
+mod endpoint;
 
 use actix_web::{post, web, App, get, HttpServer, HttpResponse };
 use juniper::http::{ graphiql::graphiql_source };
 use db::{ initMongoConnection };
 use schemas::user::{ UserSchema };
+use endpoint::{ mainEndpoint };
 //use mongodb::{ Database };
 
 
-#[post("/graphql")]
-async fn greet() -> web::Json<Vec<UserSchema>>
-{
-    let mut returnedJSON :Vec<UserSchema>  = Vec::new(); 
-
-    returnedJSON.push(UserSchema{
-        ID: "215414asfdasdfg2354".to_string(),
-        name: "John Smith".to_string(),
-        email: "JohnSmith@gmail.com".to_string(),
-        cellnumber: "+233201244474".to_string(),
-        profilePicUrl: "dfadgfag3qwtqsgfda313".to_string(),
-        planType: "Standard".to_string(),
-        registerDay: 1234146i32,
-        lastPaymentDay: 1234146i32,
-        hasCancelledTheService: false
-    });
-
-    return web::Json(returnedJSON);
-}
  
 #[get("/graphiql")]
 async fn graphQlInterface() -> HttpResponse
@@ -42,7 +25,6 @@ async fn graphQlInterface() -> HttpResponse
         .body(html);
 }
  
-
 #[actix_web::main]
 async fn main() -> std::io::Result<()>
 {
@@ -62,8 +44,7 @@ async fn main() -> std::io::Result<()>
     }
     HttpServer::new(|| {
         App::new()
-            .route("/hello", web::post().to(|| async { "Hello World!" }))
-            .service(greet)
+            .service(mainEndpoint)
             .service(graphQlInterface)
     })
     .bind(("127.0.0.1", 8080))?

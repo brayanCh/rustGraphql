@@ -1,9 +1,12 @@
+//mod schemas;
 use mongodb::{ Database, Collection };
 
+pub struct userResolver {}
 
-pub struct Query {}
-
-impl Query {
-
-    pub async getAllUsers() 
-};
+impl userResolver
+{
+    pub async fn getAllUsers()
+    {
+        
+    }
+}
