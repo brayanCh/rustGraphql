@@ -5,10 +5,11 @@ mod db;
 mod schemas;
 mod endpoint;
 
-use actix_web::{post, web, App, get, HttpServer, HttpResponse };
+use actix_web::{post, web, App, get,  HttpServer, HttpResponse };
 use juniper::http::{ graphiql::graphiql_source };
 use db::{ initMongoConnection };
 use schemas::user::{ UserSchema };
+use resolvers::userResolver::{ newSchema, Schema };
 use endpoint::{ mainEndpoint };
 //use mongodb::{ Database };
 
@@ -28,6 +29,8 @@ async fn graphQlInterface() -> HttpResponse
 #[actix_web::main]
 async fn main() -> std::io::Result<()>
 {
+    let schema = newSchema();
+    let schemaPassed = web::Data::new(schema);
     let a = initMongoConnection();
     match a.await {
         Ok(db) => {
@@ -42,8 +45,10 @@ async fn main() -> std::io::Result<()>
             println!("{}", err);
         }
     }
-    HttpServer::new(|| {
+    
+    HttpServer::new(move || {
         App::new()
+            .app_data(web::Data::clone(&schemaPassed))
             .service(mainEndpoint)
             .service(graphQlInterface)
     })

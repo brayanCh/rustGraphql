@@ -1,9 +1,10 @@
 use serde::Serialize;
 use mongodb::{ Database, Collection };
+use juniper::GraphQLObject;
 
 //let db = client.database("mydb")
 
-#[derive(Serialize)]
+#[derive(Serialize, GraphQLObject)]
 pub struct UserSchema {
     pub ID: String,
     pub name: String,
