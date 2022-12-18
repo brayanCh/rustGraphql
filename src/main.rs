@@ -11,7 +11,7 @@ use db::{ initMongoConnection };
 use schemas::user::{ UserSchema };
 use resolvers::userResolver::{ newSchema, Schema };
 use endpoint::{ mainEndpoint };
-//use mongodb::{ Database };
+use mongodb::{ Database };
 
 
  
@@ -31,24 +31,15 @@ async fn main() -> std::io::Result<()>
 {
     let schema = newSchema();
     let schemaPassed = web::Data::new(schema);
-    let a = initMongoConnection();
-    match a.await {
-        Ok(db) => {
-            let listCollections = db.list_collection_names(None).await.expect("ddd");
-            for i in listCollections
-            {
-                println!("{}", i);
-            }
-            println!("It worked");
-        },
-        Err(err) => {
-            println!("{}", err);
-        }
-    }
-    
+
+    let mongoClient = initMongoConnection().await.unwrap();
+    let dataMongo = web::Data::new(mongoClient);
+
+   
     HttpServer::new(move || {
         App::new()
             .app_data(web::Data::clone(&schemaPassed))
+            .app_data(web::Data::clone(&dataMongo))
             .service(mainEndpoint)
             .service(graphQlInterface)
     })

@@ -12,7 +12,6 @@ fn print_type_of<T>(_: &T) {
 //#[tokio::main]
 pub async fn initMongoConnection() -> mongodb::error::Result<Database>
 {
-    println!("initMongoStarted");
     // Parse your connection string into an options struct
     let mut client_options =
         ClientOptions::parse(&returnMongoKey())
@@ -30,7 +29,7 @@ pub async fn initMongoConnection() -> mongodb::error::Result<Database>
     println!("Connected successfully.");
 
     let db : Database = client.database("test");
-    print_type_of(&db);
+
     // List the names of the databases in that cluster
     Ok(db)
 }

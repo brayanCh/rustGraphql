@@ -1,20 +1,24 @@
 //mod schemas;
 use mongodb::{ Database, Collection };
 use juniper::{ RootNode, EmptyMutation, FieldError , EmptySubscription};
-use crate::schemas::user::{ UserSchema };
+use crate::schemas::user::{ UserSchema, CreateUserInput };
+use std::sync::{ Arc };
+use mongodb::bson::{doc, Document};
 
 pub struct Context {
-    pub stData: String
+    pub database: Arc<Database>
 }
 
 impl juniper::Context for Context {}
 
 pub struct Query {}
 
-pub type Schema = RootNode<'static, Query, EmptyMutation<Context>, EmptySubscription<Context>>;
+pub struct Mutation {}
+
+pub type Schema = RootNode<'static, Query, Mutation, EmptySubscription<Context>>;
 
 pub fn newSchema() -> Schema {
-    Schema::new(Query{}, EmptyMutation::<Context>::new(), EmptySubscription::<Context>::new() )
+    Schema::new(Query{}, Mutation{}, EmptySubscription::<Context>::new() )
 }
 
 
@@ -46,7 +50,35 @@ impl Query
     {
         return "dddd";
     }
+}
 
+#[juniper::graphql_object(
+    Context = Context 
+)]
+impl Mutation 
+{
+    pub async fn createUser(input : CreateUserInput, context : &Context) -> Result<UserSchema, FieldError>
+    {
+
+        let db = context.database.collection::<UserSchema>("user");
+
+        let res = UserSchema{
+            ID: input.ID.to_string(),
+            name: input.name.to_string(),
+            email: input.email.to_string(),
+            cellnumber: input.cellnumber.to_string(),
+            profilePicUrl: input.profilePicUrl.to_string(),
+            planType: input.planType.to_string(),
+            registerDay: input.registerDay,
+            lastPaymentDay: input.lastPaymentDay,
+            hasCancelledTheService: false
+        };
+
+        let response = db.insert_one(&res, None).await;
+        println!("{:?}", &response);
+
+        return Ok(res);
+    }
 }
 
 /*

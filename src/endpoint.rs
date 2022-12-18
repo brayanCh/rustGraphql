@@ -2,11 +2,13 @@ use actix_web::{ web, post, HttpResponse };
 use crate::schemas::user::{ UserSchema };
 use juniper::http::{ GraphQLRequest };
 use crate::resolvers::userResolver::{ Schema, Context };
+use mongodb::{ Database };
 
 #[post("/graphql")]
 pub async fn mainEndpoint(
         data: web::Json<GraphQLRequest>,
-        schema: web::Data<Schema>
+        schema: web::Data<Schema>,
+        dataMongo: web::Data<Database>
     ) -> HttpResponse
 {
     let mut returnedJSON :Vec<UserSchema>  = Vec::new(); 
@@ -22,7 +24,7 @@ pub async fn mainEndpoint(
         lastPaymentDay: 1234146i32,
         hasCancelledTheService: false
     });
-    let newContext : Context = Context { stData : "XD".to_string() };
+    let newContext : Context = Context { database : dataMongo.into_inner() };
 
     let retVal = data.execute(&schema, &newContext).await;
 
