@@ -46,9 +46,20 @@ impl Query
 
         return Ok(returnedJSON);
     }
-    pub fn getString () -> &str 
+
+    pub async fn getAllUsers(context : &Context) -> Result<Vec<UserSchema>, FieldError>
     {
-        return "dddd";
+        let collUser = context.database.collection::<UserSchema>("user");
+        let mut res = collUser.find(None, None).await?;
+
+        let mut returnedJSON :Vec<UserSchema>  = Vec::new(); 
+
+        while res.advance().await?
+        {
+            returnedJSON.push(res.deserialize_current()?);
+        }
+
+        return Ok(returnedJSON);
     }
 }
 
@@ -60,7 +71,7 @@ impl Mutation
     pub async fn createUser(input : CreateUserInput, context : &Context) -> Result<UserSchema, FieldError>
     {
 
-        let db = context.database.collection::<UserSchema>("user");
+        let collUser = context.database.collection::<UserSchema>("user");
 
         let res = UserSchema{
             ID: input.ID.to_string(),
@@ -74,21 +85,9 @@ impl Mutation
             hasCancelledTheService: false
         };
 
-        let response = db.insert_one(&res, None).await;
+        let response = collUser.insert_one(&res, None).await;
         println!("{:?}", &response);
 
         return Ok(res);
     }
 }
-
-/*
-pub struct userResolver {}
-
-impl userResolver
-{
-    pub async fn getAllUsers()
-    {
-        
-    }
-}
-*/

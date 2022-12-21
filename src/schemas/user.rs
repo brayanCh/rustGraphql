@@ -4,7 +4,7 @@ use juniper::{ GraphQLObject, GraphQLInputObject };
 
 //let db = client.database("mydb")
 
-#[derive(Serialize, GraphQLObject, Deserialize)]
+#[derive(Serialize, Debug, GraphQLObject, Deserialize)]
 pub struct UserSchema {
     pub ID: String,
     pub name: String,
