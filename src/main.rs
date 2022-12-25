@@ -1,14 +1,13 @@
-#![ allow(non_snake_case)]
+#![allow(non_snake_case)]
 
 mod resolvers;
 mod db;
 mod schemas;
 mod endpoint;
 
-use actix_web::{post, web, App, get,  HttpServer, HttpResponse };
+use actix_web::{ web, App, get,  HttpServer, HttpResponse };
 use juniper::http::{ graphiql::graphiql_source };
 use db::{ initMongoConnection };
-use schemas::user::{ UserSchema };
 use resolvers::userResolver::{ newSchema, Schema };
 use endpoint::{ mainEndpoint };
 use mongodb::{ Database };
@@ -19,7 +18,7 @@ use mongodb::{ Database };
 async fn graphQlInterface() -> HttpResponse
 {
 
-    let html = graphiql_source(&"/graphql", Some("ws://localhost:8080"));
+    let html : String = graphiql_source(&"/graphql", Some("ws://localhost:8080"));
 
     return HttpResponse::Ok()
         .content_type("text/html; charset=utf-8")
@@ -29,11 +28,11 @@ async fn graphQlInterface() -> HttpResponse
 #[actix_web::main]
 async fn main() -> std::io::Result<()>
 {
-    let schema = newSchema();
-    let schemaPassed = web::Data::new(schema);
+    let schema : Schema = newSchema();
+    let schemaPassed : web::Data<Schema> = web::Data::new(schema);
 
-    let mongoClient = initMongoConnection().await.unwrap();
-    let dataMongo = web::Data::new(mongoClient);
+    let mongoClient : Database = initMongoConnection().await.unwrap();
+    let dataMongo : web::Data<Database> = web::Data::new(mongoClient);
 
    
     HttpServer::new(move || {

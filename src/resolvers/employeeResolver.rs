@@ -1,4 +1,4 @@
-
+/*
 pub fn getAllUsers ()
 {
 
@@ -22,4 +22,4 @@ pub fn updateUser ()
 
 
 }
-
+*/

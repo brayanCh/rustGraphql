@@ -1,5 +1,4 @@
 use serde::Serialize;
-use mongodb::{ Database, Collection };
 
 
 #[derive(Serialize)]
@@ -14,7 +13,3 @@ pub struct EquipmentSchema {
 }
 
 
-pub fn equipmentCollection (db : &Database ) -> Collection<EquipmentSchema>
-{
-    return db.collection::<EquipmentSchema>("equipment");
-}

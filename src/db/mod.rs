@@ -5,10 +5,6 @@ use mongodb::{ Database };
 use env::{returnMongoKey};
 
 
-fn print_type_of<T>(_: &T) {
-    println!("{}", std::any::type_name::<T>())
-}
-
 //#[tokio::main]
 pub async fn initMongoConnection() -> mongodb::error::Result<Database>
 {

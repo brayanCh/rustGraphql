@@ -1,5 +1,4 @@
 use serde::{ Serialize, Deserialize };
-use mongodb::{ Database, Collection };
 use juniper::{ GraphQLObject, GraphQLInputObject };
 
 //let db = client.database("mydb")
@@ -29,7 +28,3 @@ pub struct CreateUserInput {
     pub lastPaymentDay: i32,
 }
 
-pub fn userCollection (db : &Database ) -> Collection<UserSchema>
-{
-    return db.collection::<UserSchema>("user");
-}

@@ -1,9 +1,8 @@
 //mod schemas;
-use mongodb::{ Database, Collection };
-use juniper::{ RootNode, EmptyMutation, FieldError , EmptySubscription};
+use mongodb::{ Database };
+use juniper::{ RootNode, FieldError, EmptySubscription};
 use crate::schemas::user::{ UserSchema, CreateUserInput };
 use std::sync::{ Arc };
-use mongodb::bson::{doc, Document};
 
 pub struct Context {
     pub database: Arc<Database>

@@ -1,5 +1,4 @@
 use serde::Serialize;
-use mongodb::{ Database, Collection };
 use juniper::{ GraphQLObject };
 
 #[derive(Serialize, GraphQLObject)]
@@ -19,9 +18,4 @@ pub struct EmployeeSchema {
     pub isAdmin: bool
 }
 
-
-pub fn employeeCollection (db : &Database ) -> Collection<EmployeeSchema>
-{
-    return db.collection::<EmployeeSchema>("employee");
-}
 
